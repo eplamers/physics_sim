@@ -8,7 +8,8 @@
 #include <iostream>
 
 //Default Constructor
-Point::Point()
+Point::Point() :
+	m_ID { s_id_generator++ }
 {
 	print();
 }
@@ -69,6 +70,7 @@ Point& Point::applyForce(double fx = 0.0, double fy = 0.0, bool isPrint = 0.0)
 }
 
 //check for collision with containment box
+// TODO make more robust
 void Point::checkCollision()
 {
 	if ((m_x + m_radius) >= m_x_ulim)

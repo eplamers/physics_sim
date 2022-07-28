@@ -3,10 +3,10 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
-#define window_x 800.0f
-#define window_y 600.0f
-#define radius 30.0f
-#define renderScaling 10.0
+#define window_x 2000.0f
+#define window_y 1000.0f
+#define radius 20.0f
+#define renderScaling 20.0
 #define BALLBOUNCE
 
 double render_x { 0.0f };
@@ -32,10 +32,10 @@ int main()
 
 	sf::Event event;
 
-	Point ball { 30.0, 30.0, 10.0, 10.0, 0.0, 0.0, 1.0 };
+	Point ball { 30.0, 30.0, 10.0, 15.0, 0.0, 0.0, 1.0 };
 	ball.setGravity(9.8);
 	ball.setWindResistance(0.0);
-	ball.setCOR(1.0);
+	ball.setCOR(0.98);
 	ball.setDt(0.01);
 	ball.setRadius(radius / renderScaling);
 	ball.setWalls((window_x / renderScaling), 0.0, (window_y / renderScaling), 0.0);
@@ -48,7 +48,7 @@ int main()
 
 	std::cout << window.getSize().x << "\n";
 
-	while (window.isOpen())
+	while ((window.isOpen()) && (ball.getT() < 100))
 	{
 		while (window.pollEvent(event))
 		{
@@ -68,8 +68,10 @@ int main()
 		window.display();
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
 #endif
 	}
+	window.close();
 
 	return 0;
 }

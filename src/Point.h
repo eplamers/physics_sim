@@ -1,6 +1,11 @@
 //
 // Created by erik on 7/25/22.
 //
+// TODO update this class to work with pointers
+// TODO update this class to work with const reference pointers for getter functions
+// TODO update this class to recognize collisions with other instances of the same class
+// TODO update this class to accept an SFML window so that it can place the objects inside it
+// TODO organize all the point state info into a compound data type or whatever seems proper
 
 #ifndef HELLOWORLD_POINT_H
 #define HELLOWORLD_POINT_H
@@ -10,6 +15,8 @@
 class Point
 {
 private:
+	static inline int s_id_generator { 1 }; // point object ID generator
+	int m_ID {};							// point object ID
 	double m_x { 0.0 };
 	double m_y { 0.0 };
 	double m_xd { 0.0 };
@@ -77,6 +84,10 @@ public:
 	{
 		return m_y;
 	}
+	const double& getT()
+	{
+		return m_t;
+	}
 
 	void print();
 	void printWallParam();
@@ -84,7 +95,6 @@ public:
 	//non-trivial member functions
 	Point& applyForce(double fx, double fy, bool print); // this allows me to return a pointer to the class instance for chaining member function calls
 	void setState(double x, double y, double xd, double yd, double fx, double fy, double mass);
-	//TODO program collision detection with wall
 	void checkCollision();
 	//
 };
