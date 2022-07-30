@@ -61,6 +61,8 @@ Point& Point::applyForce(double fx = 0.0, double fy = 0.0, bool isPrint = 0.0)
 	// update time
 	m_t += m_dt;
 
+	// update shape parameters if present
+
 	// option call to print
 	if (isPrint)
 	{
@@ -83,8 +85,8 @@ Point& Point::applySwirlingForce()
 	new_x = m_x - origin_x;
 	new_y = m_y - origin_y;
 	R = sqrt(pow(new_x, 2) + pow(new_y, 2));
-	Fx = -R * sin(atan2(new_y, new_x)) - 10 * new_x;
-	Fy = R * cos(atan2(new_y, new_x)) - 10 * new_y;
+	Fx = -R * sin(atan2(new_y, new_x)) - (10 * new_x);
+	Fy = R * cos(atan2(new_y, new_x)) - (10 * new_y);
 	applyForce(Fx, Fy);
 	std::cout << "m_x:" << m_x - origin_x << ", m_y:" << m_y << ", Fx:" << Fx << ", Fy:" << Fy << "\n";
 	return *this;
@@ -149,12 +151,15 @@ void Point::checkCollision()
 	}
 }
 
-void Point::linkRenderWindow(sf::RenderWindow window)
+void Point::linkWindowAndCircle(sf::RenderWindow& window, sf::CircleShape& circle, bool verbose = 1)
 {
 	// update window size params
-}
+	setWalls(window.getSize().x / m_renderScaling, 0.0, window.getSize().y / m_renderScaling, 0.0);
+	// update shape radius and position
+	setRadius(circle.getRadius() / m_renderScaling);
 
-void Point::linkCircle(sf::CircleShape)
-{
-	//
+	if (verbose)
+	{
+		printWallParam();
+	}
 }

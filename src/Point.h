@@ -5,6 +5,7 @@
 // TODO update this class to work with const reference pointers for getter functions
 // TODO update this class to recognize collisions with other instances of the same class
 // TODO update this class to accept an SFML window so that it can place the objects inside it
+// TODO make default behavior not require SFML, but extensible with SFML
 // TODO organize all the point state info into a compound data type or whatever seems proper
 // TODO click to interact with object
 
@@ -25,7 +26,7 @@ private:
 	double m_fx { 0.0 };
 	double m_fy { 0.0 };
 	double m_mass { 1.0 };
-	double m_dt { 0.05 };
+	double m_dt { 0.01 };
 	double m_g { 0.0 }; // gravity defaulted to 0.0
 	double m_b { 0.0 }; // air resistance defaulted to 0.0
 	double m_t { 0.0 }; // time
@@ -35,6 +36,7 @@ private:
 	double m_y_ulim { 20 };
 	double m_y_llim { -20 };
 	double m_bounce { 0.8 };
+	double m_renderScaling { 5.0 };
 	const std::string m_right_collision { "right wall collision" };
 	const std::string m_left_collision { "left wall collision" };
 	const std::string m_top_collision { "top wall collision" };
@@ -75,6 +77,12 @@ public:
 		m_y_ulim = y_ulim;
 		m_y_llim = y_llim;
 	}
+	void setPosition(double x, double y)
+	{
+		m_x = x;
+		m_y = y;
+	}
+
 	void setCOR(double cor)
 	{
 		//TODO make sure in range 0-1
@@ -103,8 +111,7 @@ public:
 	void setState(double x, double y, double xd, double yd, double fx, double fy, double mass);
 	void checkCollision();
 	Point& applySwirlingForce();
-	void linkRenderWindow(sf::RenderWindow window);
-	void linkCircle(sf::CircleShape circle);
+	void linkWindowAndCircle(sf::RenderWindow& window, sf::CircleShape& circle, bool verbose);
 	//
 };
 
