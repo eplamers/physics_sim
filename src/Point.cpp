@@ -69,32 +69,92 @@ Point& Point::applyForce(double fx = 0.0, double fy = 0.0, bool isPrint = 0.0)
 	return *this;
 }
 
+Point& Point::applySwirlingForce()
+{
+	double origin_x {};
+	double origin_y {};
+	double R {};
+	double Fx {};
+	double Fy {};
+	double new_x {};
+	double new_y {};
+	origin_x = (m_x_ulim - m_x_llim) / 2;
+	origin_y = (m_y_ulim - m_y_llim) / 2;
+	new_x = m_x - origin_x;
+	new_y = m_y - origin_y;
+	R = sqrt(pow(new_x, 2) + pow(new_y, 2));
+	Fx = -R * sin(atan2(new_y, new_x)) - 10 * new_x;
+	Fy = R * cos(atan2(new_y, new_x)) - 10 * new_y;
+	applyForce(Fx, Fy);
+	std::cout << "m_x:" << m_x - origin_x << ", m_y:" << m_y << ", Fx:" << Fx << ", Fy:" << Fy << "\n";
+	return *this;
+}
+
+void Point::printStr(const std::string& str)
+{
+	std::cout << str << "\n";
+}
+
 //check for collision with containment box
 // TODO make more robust
+// Reverse when collision is first detected... but don't do anything if collision continues to be detected.
+// TODO pass string by reference to make more efficient?
 void Point::checkCollision()
 {
+	bool isColliding { false };
+
 	if ((m_x + m_radius) >= m_x_ulim)
 	{
 		//bounce off right wall
-		m_xd = -m_xd * m_bounce;
-		std::cout << "bounced off right wall!\n";
+		if (!isColliding)
+		{
+			m_xd = -m_xd * m_bounce;
+			printStr(m_right_collision);
+			isColliding = true;
+		}
 	}
 	else if ((m_x - m_radius) <= m_x_llim)
 	{
 		// bounce off left wall
-		m_xd = -m_xd * m_bounce;
-		std::cout << "bounced off left wall!\n";
+		if (!isColliding)
+		{
+			m_xd = -m_xd * m_bounce;
+			printStr(m_left_collision);
+			isColliding = true;
+		}
 	}
 	else if ((m_y + m_radius) >= m_y_ulim)
 	{
 		// bounce off of ceiling
-		m_yd = -m_yd * m_bounce;
-		std::cout << "bounced off ceiling!\n";
+		if (!isColliding)
+		{
+			m_yd = -m_yd * m_bounce;
+			printStr(m_top_collision);
+			isColliding = true;
+		}
 	}
 	else if ((m_y - m_radius) <= m_y_llim)
 	{
 		// bounce off of floor
-		m_yd = -m_yd * m_bounce;
-		std::cout << "bounced off floor!\n";
+		if (!isColliding)
+		{
+			m_yd = -m_yd * m_bounce;
+			printStr(m_bottom_collision);
+			isColliding = true;
+		}
 	}
+	else
+	{
+		isColliding = false;
+	}
+}
+
+void Point::linkRenderWindow(sf::RenderWindow window)
+{
+	// update window size params
+}
+
+void Point::linkCircle(sf::CircleShape)
+{
+	//
 }

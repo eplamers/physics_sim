@@ -3,10 +3,10 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
-#define window_x 2000.0f
-#define window_y 1000.0f
+#define window_x 1000.0f
+#define window_y 800.0f
 #define radius 20.0f
-#define renderScaling 20.0
+#define renderScaling 5.0
 #define BALLBOUNCE
 
 double render_x { 0.0f };
@@ -14,6 +14,7 @@ double render_y { 0.0f };
 
 int main()
 {
+
 	util::Platform platform;
 
 #if defined(_DEBUG)
@@ -32,10 +33,10 @@ int main()
 
 	sf::Event event;
 
-	Point ball { 30.0, 30.0, 10.0, 15.0, 0.0, 0.0, 1.0 };
-	ball.setGravity(9.8);
-	ball.setWindResistance(0.0);
-	ball.setCOR(0.98);
+	Point ball { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.0 };
+	ball.setGravity(0.0);
+	ball.setWindResistance(0.7);
+	ball.setCOR(0.80);
 	ball.setDt(0.01);
 	ball.setRadius(radius / renderScaling);
 	ball.setWalls((window_x / renderScaling), 0.0, (window_y / renderScaling), 0.0);
@@ -43,7 +44,6 @@ int main()
 	render_x = ball.getX() * renderScaling - radius;
 	render_y = -ball.getY() * renderScaling + window_y - radius;
 	// use window to set ball radius, and window frame limits
-
 	shape.setPosition(render_x, render_y);
 
 	std::cout << window.getSize().x << "\n";
@@ -57,8 +57,8 @@ int main()
 		}
 
 #ifdef BALLBOUNCE
-
-		ball.applyForce(0.0, 0.0, true).checkCollision();
+		ball.applySwirlingForce().checkCollision();
+		//ball.applyForce(0.0, 0.0, true).checkCollision();
 		render_x = ball.getX() * renderScaling - radius;
 		render_y = -ball.getY() * renderScaling + window_y - radius;
 		shape.setPosition(render_x, render_y);

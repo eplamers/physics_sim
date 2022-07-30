@@ -6,6 +6,7 @@
 // TODO update this class to recognize collisions with other instances of the same class
 // TODO update this class to accept an SFML window so that it can place the objects inside it
 // TODO organize all the point state info into a compound data type or whatever seems proper
+// TODO click to interact with object
 
 #ifndef HELLOWORLD_POINT_H
 #define HELLOWORLD_POINT_H
@@ -34,6 +35,10 @@ private:
 	double m_y_ulim { 20 };
 	double m_y_llim { -20 };
 	double m_bounce { 0.8 };
+	const std::string m_right_collision { "right wall collision" };
+	const std::string m_left_collision { "left wall collision" };
+	const std::string m_top_collision { "top wall collision" };
+	const std::string m_bottom_collision { "bottom wall collision" };
 
 public:
 	//constructor declaration
@@ -91,11 +96,15 @@ public:
 
 	void print();
 	void printWallParam();
+	void printStr(const std::string&);
 
 	//non-trivial member functions
 	Point& applyForce(double fx, double fy, bool print); // this allows me to return a pointer to the class instance for chaining member function calls
 	void setState(double x, double y, double xd, double yd, double fx, double fy, double mass);
 	void checkCollision();
+	Point& applySwirlingForce();
+	void linkRenderWindow(sf::RenderWindow window);
+	void linkCircle(sf::CircleShape circle);
 	//
 };
 
